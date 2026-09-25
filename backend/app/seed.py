@@ -11,6 +11,7 @@ def init_db():
         );
         CREATE TABLE IF NOT EXISTS rolls(
             id INTEGER PRIMARY KEY, name TEXT, width REAL, length REAL, pattern_cm REAL,
+            match_type TEXT DEFAULT 'straight',
             data_quality TEXT DEFAULT 'clean', note TEXT DEFAULT ''
         );
         CREATE TABLE IF NOT EXISTS settings(key TEXT PRIMARY KEY, value TEXT);
@@ -20,6 +21,11 @@ def init_db():
         );
         """
     )
+    # 老库补列：卷材默认匹配方式
+    cols = {r["name"] for r in conn.execute("PRAGMA table_info(rolls)").fetchall()}
+    if "match_type" not in cols:
+        conn.execute("ALTER TABLE rolls ADD COLUMN match_type TEXT DEFAULT 'straight'")
+        conn.execute("UPDATE rolls SET match_type='straight' WHERE match_type IS NULL")
     if conn.execute("SELECT COUNT(*) c FROM walls").fetchone()["c"] == 0:
         conn.executemany(
             "INSERT INTO walls(name,perimeter,height,data_quality,note) VALUES (?,?,?,?,?)",
@@ -30,11 +36,11 @@ def init_db():
             ],
         )
         conn.executemany(
-            "INSERT INTO rolls(name,width,length,pattern_cm,data_quality,note) VALUES (?,?,?,?,?,?)",
+            "INSERT INTO rolls(name,width,length,pattern_cm,match_type,data_quality,note) VALUES (?,?,?,?,?,?,?)",
             [
-                ("素色53", 0.53, 10.0, 0, "clean", ""),
-                ("大花64", 0.53, 10.0, 64, "clean", ""),
-                ("脏数据-零宽", 0.0, 10.0, 0, "dirty", ""),
+                ("素色53", 0.53, 10.0, 0, "straight", "clean", ""),
+                ("大花64", 0.53, 10.0, 64, "straight", "clean", ""),
+                ("脏数据-零宽", 0.0, 10.0, 0, "straight", "dirty", ""),
             ],
         )
         conn.execute("INSERT INTO settings(key,value) VALUES ('unit','roll')")
