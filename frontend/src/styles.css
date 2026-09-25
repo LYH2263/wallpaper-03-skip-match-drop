@@ -4,6 +4,15 @@ body { margin: 0; font-family: Georgia, serif; background: #faf3e8; }
 .wp-header a.router-link-active { text-decoration: underline; }
 .page { padding: 1rem 1.5rem; }
 .strip-bar { display: flex; gap: 4px; align-items: flex-end; flex-wrap: wrap; }
+.strip-bar details { width: 100%; }
+.strip-row { display: flex; gap: 4px; align-items: flex-end; flex-wrap: wrap; margin-top: 0.5rem; }
+.drop-len { margin: 0.25rem 0; }
 .strip { width: 14px; background: linear-gradient(#c49a6c, #8b5a2b); border-radius: 2px 2px 0 0; }
 .roll-chip { display: inline-block; margin: 0.25rem; padding: 0.5rem; background: #fff; border: 1px dashed #6b4226; }
+.match-toggle { margin: 0 0.5rem; white-space: nowrap; }
+.match-toggle button { cursor: pointer; }
+.match-toggle button.active { font-weight: bold; background: #6b4226; color: #fff; }
+.lookup { margin: 0.5rem 0; }
+.run-detail { margin: 0.75rem 0; padding: 0.5rem 0.75rem; background: #fff; border: 1px solid #6b4226; }
+.hint { color: #6b4226; font-size: 0.9em; }
 .warn { color: #a00; }
